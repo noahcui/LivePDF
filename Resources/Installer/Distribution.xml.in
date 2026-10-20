@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<installer-gui-script minSpecVersion="2">
+    <title>LivePDF</title>
+    <options customize="never" require-scripts="false" hostArchitectures="arm64" rootVolumeOnly="true"/>
+    <domains enable_anywhere="false" enable_currentUserHome="false" enable_localSystem="true"/>
+    <volume-check script="true">
+        <allowed-os-versions>
+            <os-version min="14.0"/>
+        </allowed-os-versions>
+    </volume-check>
+    <readme file="ReadMe.html" mime-type="text/html"/>
+    <choices-outline>
+        <line choice="livepdf"/>
+    </choices-outline>
+    <choice id="livepdf" title="LivePDF" description="package.description" visible="false">
+        <pkg-ref id="com.noah.LivePDF.pkg"/>
+    </choice>
+    <pkg-ref id="com.noah.LivePDF.pkg" version="@VERSION@" onConclusion="none">LivePDF-component.pkg</pkg-ref>
+</installer-gui-script>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>安装 LivePDF</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; font-size: 13px; line-height: 1.6; color: #222; }
+        h1 { font-size: 22px; }
+        h2 { font-size: 16px; margin-top: 22px; }
+        code, pre { font-family: Menlo, monospace; font-size: 11px; }
+        pre { background: #f3f3f3; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>LivePDF</h1>
+    <p>PDF 文件更新后自动重载，并保留页码、页内位置、缩放和显示模式。适用于使用 latexmk 等工具反复生成 PDF 的论文写作流程。</p>
+    <h2>系统要求</h2>
+    <ul>
+        <li>Apple Silicon Mac（arm64），macOS 14 或更新版本。</li>
+        <li>无需安装 Swift、Xcode、Command Line Tools 或 TeX。</li>
+        <li>安装需要管理员授权，只能安装到当前启动系统盘。</li>
+    </ul>
+    <h2>安装内容</h2>
+    <ul>
+        <li>应用：<code>/Applications/LivePDF.app</code></li>
+        <li>命令行入口：<code>/usr/local/bin/livepdf</code></li>
+    </ul>
+    <p>本项目源码、文档和原创图标使用 MIT 许可证，许可声明随 app 提供。当前安装包未使用 Developer ID 证书签名或 Apple 公证。</p>
+    <h2>开始使用</h2>
+    <p>安装完成后，从“应用程序”打开 LivePDF，按 ⌘O 打开 PDF，或将 PDF 拖入窗口。首次启动后，也可在 Finder 的“打开方式”中选择 LivePDF。</p>
+    <pre>livepdf paper.pdf
+livepdf "有 空格的论文.pdf" another.pdf</pre>
+    <p>支持相对路径、空格和多个文件；每个 PDF 使用独立窗口。若终端提示找不到命令，可直接使用 <code>/usr/local/bin/livepdf</code>，或把 <code>/usr/local/bin</code> 加入 PATH。</p>
+    <p>⌘R 手动重载，⌘F 搜索，⌘L 跳页，⌘+ / ⌘- 缩放，⌘0 实际大小，⌘9 适应宽度。默认在文件停止变化约 300 ms 后自动重载；新内容无效或尚未写完时保留旧文档。</p>
+    <p>应用和安装器会按系统首选语言显示简体中文或英文。安装过程不会自动启动 app，也不会修改 shell 配置。</p>
+</body>
+</html>
