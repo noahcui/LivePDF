@@ -1,7 +1,7 @@
 import CoreServices
 import Foundation
 
-/// Watches the containing directory, not a descriptor for the PDF's old inode.
+/// Watches the containing directory, not a descriptor for the document's old inode.
 /// Its callback runs on a private serial queue after the file becomes quiet.
 /// Keep the watcher alive for the lifetime of the document window.
 public final class FileWatcher {
@@ -11,8 +11,8 @@ public final class FileWatcher {
 
         public var errorDescription: String? {
             switch self {
-            case .cannotCreateStream: return L10n.text("Could not create the PDF directory watcher.")
-            case .cannotStartStream: return L10n.text("Could not start the PDF directory watcher.")
+            case .cannotCreateStream: return L10n.text("Could not create the document directory watcher.")
+            case .cannotStartStream: return L10n.text("Could not start the document directory watcher.")
             }
         }
     }
@@ -179,7 +179,7 @@ private final class WatchState {
 
     func deliverChange() {
         guard isRunning else { return }
-        // A removed/mid-write file leaves the old PDF untouched. Its next event
+        // A removed/mid-write file leaves the old document untouched. Its next event
         // retries naturally, while this directory stream stays alive.
         guard let snapshot = try? FileSnapshot.read(url: url),
               policy.accept(fingerprint: snapshot.fingerprint) else { return }

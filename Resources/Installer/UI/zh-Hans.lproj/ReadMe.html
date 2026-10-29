@@ -13,7 +13,7 @@
 </head>
 <body>
     <h1>LivePDF</h1>
-    <p>PDF 文件更新后自动重载，并保留页码、页内位置、缩放和显示模式。适用于使用 latexmk 等工具反复生成 PDF 的论文写作流程。</p>
+    <p>LivePDF 1.1.0 支持阅读 PDF 和 Markdown，文件更新后自动重载。PDF 窗口保留页码、页内位置、缩放和显示模式；Markdown 预览保留缩放，并尽量保持阅读位置。</p>
     <h2>系统要求</h2>
     <ul>
         <li>Apple Silicon Mac（arm64），macOS 14 或更新版本。</li>
@@ -25,13 +25,16 @@
         <li>应用：<code>/Applications/LivePDF.app</code></li>
         <li>命令行入口：<code>/usr/local/bin/livepdf</code></li>
     </ul>
-    <p>本项目源码、文档和原创图标使用 MIT 许可证，许可声明随 app 提供。当前安装包未使用 Developer ID 证书签名或 Apple 公证。</p>
+    <p>本项目源码、文档和原创图标使用 MIT 许可证，许可声明随 app 提供。app 使用 ad-hoc 完整性签名；当前安装包未使用 Developer ID 证书签名或 Apple 公证。</p>
     <h2>开始使用</h2>
-    <p>安装完成后，从“应用程序”打开 LivePDF，按 ⌘O 打开 PDF，或将 PDF 拖入窗口。首次启动后，也可在 Finder 的“打开方式”中选择 LivePDF。</p>
+    <p>安装完成后，从“应用程序”打开 LivePDF，按 ⌘O 打开 PDF 或 Markdown，或将文件拖入窗口。首次启动后，也可在 Finder 的“打开方式”中选择 LivePDF。</p>
     <pre>livepdf paper.pdf
-livepdf "有 空格的论文.pdf" another.pdf</pre>
-    <p>支持相对路径、空格和多个文件；每个 PDF 使用独立窗口。若终端提示找不到命令，可直接使用 <code>/usr/local/bin/livepdf</code>，或把 <code>/usr/local/bin</code> 加入 PATH。</p>
-    <p>⌘R 手动重载，⌘F 搜索，⌘L 跳页，⌘+ / ⌘- 缩放，⌘0 实际大小，⌘9 适应宽度。默认在文件停止变化约 300 ms 后自动重载；新内容无效或尚未写完时保留旧文档。</p>
+livepdf "有 空格的笔记.md" paper.pdf</pre>
+    <p>支持相对路径、空格和多个文件；每份文档使用独立窗口。若终端提示找不到命令，可直接使用 <code>/usr/local/bin/livepdf</code>，或把 <code>/usr/local/bin</code> 加入 PATH。</p>
+    <p>⌘R 手动重载，⌘F 搜索，⌘G / ⇧⌘G 切换匹配，⌘+ / ⌘- 缩放。PDF 窗口另支持 ⌘L 跳页、⌘0 实际大小和 ⌘9 适应宽度。默认在文件停止变化约 300 ms 后自动重载；新内容无效或尚未写完时保留旧文档。</p>
+    <h2>Markdown 预览</h2>
+    <p>打开 UTF-8 编码的 <code>.md</code>、<code>.markdown</code>、<code>.mdown</code> 或 <code>.mkd</code> 文件。在常用编辑器中编辑，或点击“在文本编辑中打开”，保存后即可更新预览。支持标题、强调、代码、列表、任务列表、引用、表格、链接和本地图片。文档目录内的相对 Markdown 和 PDF 链接会在 LivePDF 中打开。</p>
+    <p>渲染器提供离线 Markdown 常用语法子集。原始 HTML 按文本显示，不支持脚本、远程图片、数学公式渲染和 Mermaid 图表。图片须位于文档目录或其子目录中，并随 Markdown 重载而更新；仅修改图片不会触发重载。</p>
     <p>应用和安装器会按系统首选语言显示简体中文或英文。安装过程不会自动启动 app，也不会修改 shell 配置。</p>
 </body>
 </html>

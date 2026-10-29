@@ -16,7 +16,7 @@ public enum PDFDocumentLoader {
 
         public var errorDescription: String? {
             switch self {
-            case .fileChangedDuringRead: return L10n.text("The PDF changed while it was being read.")
+            case .fileChangedDuringRead: return L10n.text("The file changed while it was being read.")
             case .incompletePDF: return L10n.text("The PDF has not finished writing.")
             case .invalidPDF: return L10n.text("The file could not be read as a PDF.")
             case .noPages: return L10n.text("The PDF does not contain any pages.")

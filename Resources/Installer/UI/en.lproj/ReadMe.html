@@ -13,7 +13,7 @@
 </head>
 <body>
     <h1>LivePDF</h1>
-    <p>LivePDF automatically reloads a PDF when the file changes, preserving the page, reading position, zoom, and display mode. It works well with writing workflows that repeatedly generate a PDF using tools such as latexmk.</p>
+    <p>LivePDF 1.1.0 reads PDF and Markdown files and automatically reloads them after changes. PDF windows preserve the page, reading position, zoom, and display mode. Markdown previews keep their zoom and preserve the reading position when possible.</p>
     <h2>System requirements</h2>
     <ul>
         <li>An Apple Silicon Mac (arm64) running macOS 14 or later.</li>
@@ -25,13 +25,16 @@
         <li>Application: <code>/Applications/LivePDF.app</code></li>
         <li>Command: <code>/usr/local/bin/livepdf</code></li>
     </ul>
-    <p>The source code, documentation, and original icon use the MIT license. License notices are included in the app. This installer is not signed with a Developer ID certificate or notarized by Apple.</p>
+    <p>The source code, documentation, and original icon use the MIT license. License notices are included in the app. The app has an ad-hoc integrity signature; this installer is not signed with a Developer ID certificate or notarized by Apple.</p>
     <h2>Getting started</h2>
-    <p>After installation, open LivePDF from Applications. Press ⌘O to open a PDF or drag one into the window. After the first launch, you can also select LivePDF in Finder’s Open With menu.</p>
+    <p>After installation, open LivePDF from Applications. Press ⌘O to open a PDF or Markdown file, or drag one into the window. After the first launch, you can also select LivePDF in Finder’s Open With menu.</p>
     <pre>livepdf paper.pdf
-livepdf "paper with spaces.pdf" another.pdf</pre>
-    <p>Relative paths, spaces, and multiple files are supported. Each PDF opens in its own window. If your terminal cannot find the command, use <code>/usr/local/bin/livepdf</code> directly or add <code>/usr/local/bin</code> to PATH.</p>
-    <p>Use ⌘R to reload, ⌘F to search, ⌘L to go to a page, ⌘+ / ⌘- to zoom, ⌘0 for actual size, and ⌘9 to fit the width. By default, automatic reload waits about 300 ms after the last file change. An invalid or incomplete replacement leaves the previous document visible.</p>
+livepdf "notes with spaces.md" paper.pdf</pre>
+    <p>Relative paths, spaces, and multiple files are supported. Each document opens in its own window. If your terminal cannot find the command, use <code>/usr/local/bin/livepdf</code> directly or add <code>/usr/local/bin</code> to PATH.</p>
+    <p>Use ⌘R to reload, ⌘F to search, ⌘G / ⇧⌘G to move between matches, and ⌘+ / ⌘- to zoom. In PDF windows, ⌘L goes to a page, ⌘0 shows actual size, and ⌘9 fits the width. By default, automatic reload waits about 300 ms after the last file change. An invalid or incomplete replacement leaves the previous document visible.</p>
+    <h2>Markdown preview</h2>
+    <p>Open a UTF-8 <code>.md</code>, <code>.markdown</code>, <code>.mdown</code>, or <code>.mkd</code> file. Edit it in your usual editor or click Open in TextEdit, then save to update the preview. Headings, emphasis, code, lists, task lists, quotes, tables, links, and local images are supported. Relative Markdown and PDF links within the document’s folder open in LivePDF.</p>
+    <p>The renderer supports an offline Markdown subset. Raw HTML is shown as text; scripts, remote images, math rendering, and Mermaid diagrams are not supported. Images must be in the document’s folder or its subfolders. Image changes appear when the Markdown is reloaded; changing an image alone does not trigger a reload.</p>
     <p>The app and installer follow your preferred system language, with Simplified Chinese and English available. Installation does not launch the app or change your shell configuration.</p>
 </body>
 </html>

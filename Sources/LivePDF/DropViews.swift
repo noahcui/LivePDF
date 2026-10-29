@@ -1,14 +1,14 @@
 import AppKit
 import PDFKit
 import UniformTypeIdentifiers
+import WebKit
 import LivePDFCore
 
-private func pdfURLs(from pasteboard: NSPasteboard) -> [URL] {
+private func documentURLs(from pasteboard: NSPasteboard) -> [URL] {
     let objects = pasteboard.readObjects(forClasses: [NSURL.self], options: [.urlReadingFileURLsOnly: true]) ?? []
     return objects.compactMap { object in
         guard let url = object as? URL else { return nil }
-        let type = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType
-        return url.pathExtension.lowercased() == "pdf" || type?.conforms(to: .pdf) == true ? url : nil
+        return DocumentKind(url: url) != nil ? url : nil
     }
 }
 
@@ -23,13 +23,36 @@ final class DropPDFView: PDFView {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
-        pdfURLs(from: sender.draggingPasteboard).isEmpty ? [] : .copy
+        documentURLs(from: sender.draggingPasteboard).isEmpty ? [] : .copy
     }
 
     override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool { true }
 
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-        let urls = pdfURLs(from: sender.draggingPasteboard)
+        let urls = documentURLs(from: sender.draggingPasteboard)
+        guard !urls.isEmpty else { return false }
+        onOpenURLs?(urls)
+        return true
+    }
+}
+
+final class DropMarkdownWebView: WKWebView {
+    var onOpenURLs: (([URL]) -> Void)?
+
+    override init(frame: NSRect, configuration: WKWebViewConfiguration) {
+        super.init(frame: frame, configuration: configuration)
+        registerForDraggedTypes([.fileURL])
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+        documentURLs(from: sender.draggingPasteboard).isEmpty ? [] : .copy
+    }
+    override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation { draggingEntered(sender) }
+    override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        !documentURLs(from: sender.draggingPasteboard).isEmpty
+    }
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        let urls = documentURLs(from: sender.draggingPasteboard)
         guard !urls.isEmpty else { return false }
         onOpenURLs?(urls)
         return true
@@ -44,10 +67,10 @@ private final class DropWelcomeView: NSView {
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
-        pdfURLs(from: sender.draggingPasteboard).isEmpty ? [] : .copy
+        documentURLs(from: sender.draggingPasteboard).isEmpty ? [] : .copy
     }
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-        let urls = pdfURLs(from: sender.draggingPasteboard)
+        let urls = documentURLs(from: sender.draggingPasteboard)
         guard !urls.isEmpty else { return false }
         onOpenURLs?(urls)
         return true
@@ -69,12 +92,12 @@ final class WelcomeWindowController: NSWindowController {
         window.contentView = content
         let title = NSTextField(labelWithString: "LivePDF")
         title.font = .systemFont(ofSize: 32, weight: .semibold)
-        let detail = NSTextField(wrappingLabelWithString: L10n.text("Drop a PDF here, or press ⌘O to open one.\nLive reload keeps your reading position."))
+        let detail = NSTextField(wrappingLabelWithString: L10n.text("Drop a PDF or Markdown file here, or press ⌘O.\nLive reload keeps your reading position."))
         detail.alignment = .center
         detail.textColor = .secondaryLabelColor
         detail.maximumNumberOfLines = 3
         detail.preferredMaxLayoutWidth = 500
-        let button = NSButton(title: L10n.text("Open PDF…"), target: nil, action: #selector(AppDelegate.openDocument(_:)))
+        let button = NSButton(title: L10n.text("Open Document…"), target: nil, action: #selector(AppDelegate.openDocument(_:)))
         button.bezelStyle = .rounded
         let stack = NSStackView(views: [title, detail, button])
         stack.orientation = .vertical

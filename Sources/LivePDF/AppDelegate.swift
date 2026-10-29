@@ -3,7 +3,7 @@ import UniformTypeIdentifiers
 import LivePDFCore
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private var documents: [URL: DocumentWindowController] = [:]
+    private var documents: [URL: NSWindowController & LiveDocumentWindow] = [:]
     private var welcome: WelcomeWindowController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -29,7 +29,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func openDocument(_ sender: Any?) {
         let panel = NSOpenPanel()
-        panel.allowedContentTypes = [.pdf]
+        panel.allowedContentTypes = DocumentKind.contentTypes
         panel.allowsMultipleSelection = true
         panel.canChooseDirectories = false
         if panel.runModal() == .OK { open(urls: panel.urls) }
@@ -39,12 +39,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         for rawURL in urls where rawURL.isFileURL {
             // Keep the original path: symlink/rename writes must continue watching that path.
             let url = rawURL.standardizedFileURL
+            guard let kind = DocumentKind(url: url) else { continue }
             if let existing = documents[url] {
                 existing.showWindow(nil)
                 existing.window?.makeKeyAndOrderFront(nil)
                 continue
             }
-            let controller = DocumentWindowController(fileURL: url)
+            let controller: NSWindowController & LiveDocumentWindow
+            switch kind {
+            case .pdf: controller = DocumentWindowController(fileURL: url)
+            case .markdown: controller = MarkdownWindowController(fileURL: url)
+            }
             controller.onOpenURLs = { [weak self] in self?.open(urls: $0) }
             controller.onClose = { [weak self] in self?.documents.removeValue(forKey: url) }
             documents[url] = controller

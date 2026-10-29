@@ -6,7 +6,7 @@ available under the MIT license in `LICENSE`.
 The package declares no external Swift Package Manager dependencies. The source
 tree does not vendor any third-party library, font, image, or icon collection.
 
-LivePDF uses Apple system frameworks, including AppKit, PDFKit, Foundation,
+LivePDF uses Apple system frameworks, including AppKit, PDFKit, WebKit, Foundation,
 CoreServices, CryptoKit, CoreGraphics, and QuartzCore. They are supplied by macOS
 and are not included in the app, installer, or source archive. The MIT license
 does not apply to Apple's frameworks, SDK, developer tools, trademarks, or system

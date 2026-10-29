@@ -61,3 +61,15 @@
 "The PDF has not finished writing." = "PDF 文件尚未写入完成。";
 "The file could not be read as a PDF." = "无法将此文件读取为 PDF。";
 "The PDF does not contain any pages." = "PDF 文档不包含任何页面。";
+
+/* Markdown preview */
+"Drop a PDF or Markdown file here, or press ⌘O.\nLive reload keeps your reading position." = "将 PDF 或 Markdown 文件拖到这里，或按 ⌘O 打开。\n实时刷新，保持阅读位置。";
+"Open Document…" = "打开文档…";
+"Search Markdown (⌘F)" = "搜索 Markdown（⌘F）";
+"Markdown · %@" = "Markdown · %@";
+"Open in TextEdit" = "在文本编辑中打开";
+"Markdown must be a UTF-8 text file." = "Markdown 文件必须使用 UTF-8 编码。";
+"Unable to render Markdown. Press ⌘R to retry." = "无法渲染 Markdown。按 ⌘R 重试。";
+"Could not create the document directory watcher." = "无法创建文档目录监控。";
+"Could not start the document directory watcher." = "无法启动文档目录监控。";
+"The file changed while it was being read." = "读取期间文件发生了变化。";

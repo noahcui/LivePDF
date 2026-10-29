@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 — 2026-10-29
+
+- Add Markdown windows alongside PDFs, with live reload, scroll and zoom preservation, search, local images, and light/dark appearance.
+- Support Markdown through Finder, the open panel, the command line, and drag and drop, with English and Simplified Chinese UI.
+- Keep Markdown previews offline and escape raw HTML; load local images only within the document directory.
+- Clear Markdown search selection when the search query is cleared.
+
+
 ## 1.0.2 — 2026-10-19
 
 - Localize the installer and application in English and Simplified Chinese,

@@ -61,3 +61,15 @@
 "The PDF has not finished writing." = "The PDF has not finished writing.";
 "The file could not be read as a PDF." = "The file could not be read as a PDF.";
 "The PDF does not contain any pages." = "The PDF does not contain any pages.";
+
+/* Markdown preview */
+"Drop a PDF or Markdown file here, or press ⌘O.\nLive reload keeps your reading position." = "Drop a PDF or Markdown file here, or press ⌘O.\nLive reload keeps your reading position.";
+"Open Document…" = "Open Document…";
+"Search Markdown (⌘F)" = "Search Markdown (⌘F)";
+"Markdown · %@" = "Markdown · %@";
+"Open in TextEdit" = "Open in TextEdit";
+"Markdown must be a UTF-8 text file." = "Markdown must be a UTF-8 text file.";
+"Unable to render Markdown. Press ⌘R to retry." = "Unable to render Markdown. Press ⌘R to retry.";
+"Could not create the document directory watcher." = "Could not create the document directory watcher.";
+"Could not start the document directory watcher." = "Could not start the document directory watcher.";
+"The file changed while it was being read." = "The file changed while it was being read.";

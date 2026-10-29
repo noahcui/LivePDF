@@ -2,13 +2,13 @@
 
 <img src="Resources/AppIcon.png" width="112" alt="LivePDF icon" align="right">
 
-A native macOS PDF reader for writing papers. Rebuild your PDF; keep your reading position.
+A native macOS PDF and Markdown reader. Rebuild your PDF or save your Markdown; keep your reading position.
 
-为论文写作准备的 macOS 原生 PDF 阅读器。PDF 重新生成后，继续从原来的位置阅读。
+macOS 原生 PDF 与 Markdown 阅读器。重新生成 PDF 或保存 Markdown 后，继续从原来的位置阅读。
 
 [English](#english) · [简体中文](#简体中文) · [Download / 下载 v1.0.2](https://github.com/noahcui/LivePDF/releases/tag/v1.0.2)
 
-Apple Silicon · macOS 14+ · Swift + AppKit + PDFKit · [MIT](LICENSE)
+Apple Silicon · macOS 14+ · Swift + AppKit + PDFKit + WebKit · [MIT](LICENSE)
 
 ## English
 
@@ -66,6 +66,20 @@ The command opens files through macOS `open -a`, accepts relative paths and mult
 
 Continuous scrolling is the default. The top bar also accepts page numbers and search queries; press Return to apply them. The window title shows the filename and the last successful load time.
 
+### Markdown live preview (1.1.0)
+
+Markdown support is included in 1.1.0; the v1.0.2 download above predates it. The 1.1.0 installer is prepared locally at `dist/LivePDF-1.1.0-arm64.pkg` and has not been published to GitHub. Its matching source archive and checksum file are `dist/LivePDF-1.1.0-source.zip` and `dist/SHA256SUMS-v1.1.0.txt`. You can also build with `./build.sh`, then open a document directly:
+
+```sh
+open -a "$PWD/build/LivePDF.app" README.md
+```
+
+Use **⌘O**, Finder **Open With**, or drag a `.md`, `.markdown`, `.mdown`, or `.mkd` file into LivePDF. PDF and Markdown documents can stay open together in separate windows. Edit Markdown in your usual editor (or use **Open in TextEdit**); after about 300 ms of quiet, the preview updates. **⌘R** forces a reload. **⌘F**, **⌘G / ⇧⌘G**, and zoom shortcuts work in Markdown windows too.
+
+The preview supports headings, paragraphs, emphasis, inline and fenced code, quotes, lists, task lists, links, tables, and images stored in the document's folder or its subfolders. It follows the system light/dark appearance. Reload keeps zoom and uses the first visible block to preserve reading position when possible, falling back to the previous scroll offset if that block disappeared. Missing files and invalid UTF-8 leave the last valid preview visible; an empty file is a valid empty document.
+
+The renderer is an offline Markdown subset, not a complete CommonMark/GFM implementation. Raw HTML is displayed as text; remote images, scripts, math rendering, and Mermaid diagrams are not supported. Local images are resolved relative to the Markdown file and cannot escape its containing folder through paths or symlinks. Images refresh when the Markdown is reloaded; changes to image files alone do not trigger a reload. External web links open in the default browser, and relative Markdown/PDF links inside the document's folder open in LivePDF. Markdown must be UTF-8.
+
 ### Reload behavior and configuration
 
 LivePDF watches the PDF’s parent directory with file-level FSEvents, so replacing the file does not end the watch. After about **300 ms without a relevant change**, it reads an immutable snapshot and parses it in the background. Repeated notifications for identical file contents are ignored; **⌘R** forces a fresh load. A valid document replaces the old one on the main thread; failures wait for another file change or a manual reload.
@@ -102,9 +116,9 @@ This builds the release app at `build/LivePDF.app`. No Developer ID certificate,
 | --- | --- |
 | `./build.sh` | Build `build/LivePDF.app` |
 | `./install.sh` | Build and install to `~/Applications/LivePDF.app` and `~/.local/bin/livepdf` |
-| `./package.sh` | Build and create `dist/LivePDF-1.0.2-arm64.pkg` for another Mac |
+| `./package.sh` | Build and create `dist/LivePDF-1.1.0-arm64.pkg` for another Mac |
 | `./test.sh` | Run the automated acceptance tests |
-| `./scripts/make-source-archive.sh` | Export `dist/LivePDF-1.0.2-source.zip` from the current source tree |
+| `./scripts/make-source-archive.sh` | Export `dist/LivePDF-1.1.0-source.zip` from the current source tree |
 | `./scripts/make-icon.sh` | Regenerate the original PNG and ICNS from the drawing source |
 
 `install.sh` does not require administrator approval when its destination directories are user-writable. Add `export PATH="$HOME/.local/bin:$PATH"` to your shell configuration, or select another writable command directory with `./install.sh --bin-dir "$HOME/bin"`. This changes the command location only. Finder registration is included; if needed, choose the installed app through **Open With → Other…**.
@@ -169,11 +183,26 @@ On your target Mac, check:
 
 Editing, annotations, iCloud, and SyncTeX are outside the current scope. `SourceNavigationProvider` in `Sources/LivePDF/SourceNavigation.swift` reserves an interface for future SyncTeX integration.
 
-Source, documentation, and the original icon use the [MIT license](LICENSE). See [dependency notices](THIRD_PARTY_NOTICES.md) and [icon provenance](Resources/ICON.md). For development, see [contributing](CONTRIBUTING.md), the [changelog](CHANGELOG.md), and [v1.0.2 release notes](RELEASE_NOTES.md).
+Source, documentation, and the original icon use the [MIT license](LICENSE). See [dependency notices](THIRD_PARTY_NOTICES.md) and [icon provenance](Resources/ICON.md). For development, see [contributing](CONTRIBUTING.md), the [changelog](CHANGELOG.md), and [v1.1.0 release notes](RELEASE_NOTES.md).
 
 [简体中文 ↓](#简体中文) · [Back to top ↑](#livepdf)
 
 ## 简体中文
+
+### Markdown 实时预览（1.1.0）
+
+Markdown 支持已加入 1.1.0；上方 v1.0.2 下载尚不包含此功能。1.1.0 安装包已在本地准备，路径为 `dist/LivePDF-1.1.0-arm64.pkg`，尚未发布到 GitHub；配套源码包和校验清单为 `dist/LivePDF-1.1.0-source.zip`、`dist/SHA256SUMS-v1.1.0.txt`。也可运行 `./build.sh` 后打开文件：
+
+```sh
+open -a "$PWD/build/LivePDF.app" README.md
+```
+
+通过 **⌘O**、Finder 的“打开方式”或拖放打开 `.md`、`.markdown`、`.mdown`、`.mkd` 文件。PDF 和 Markdown 可以分别在多个窗口中同时阅读。在常用编辑器中保存文件，约 300 毫秒后预览自动刷新；也可点击“在文本编辑中打开”。**⌘R** 手动刷新，**⌘F** 搜索，**⌘G / ⇧⌘G** 切换匹配，缩放快捷键同样可用。
+
+支持标题、段落、强调、行内及围栏代码、引用、列表、任务列表、链接、表格，以及文档目录及其子目录中的本地图片，并跟随系统深浅色外观。刷新保留缩放，尽量按首个可见内容块保持位置；内容块被删除时退回原滚动偏移。文件临时缺失或 UTF-8 无效时保留上次预览；空文件会显示空文档。
+
+此版本提供离线 Markdown 常用语法子集，未完整实现 CommonMark/GFM；原始 HTML 按文本显示，不支持远程图片、脚本、数学公式渲染和 Mermaid 图表。本地图片不允许通过路径或符号链接访问文档目录之外；图片随文档刷新，仅修改图片不会触发刷新。网页链接由默认浏览器打开；文档目录内的相对 Markdown/PDF 链接在 LivePDF 中打开。Markdown 文件须使用 UTF-8 编码。
+
 
 ### 安装
 
@@ -265,9 +294,9 @@ cd LivePDF
 | --- | --- |
 | `./build.sh` | 构建 `build/LivePDF.app` |
 | `./install.sh` | 构建并安装到 `~/Applications/LivePDF.app` 和 `~/.local/bin/livepdf` |
-| `./package.sh` | 构建并生成供其他 Mac 安装的 `dist/LivePDF-1.0.2-arm64.pkg` |
+| `./package.sh` | 构建并生成供其他 Mac 安装的 `dist/LivePDF-1.1.0-arm64.pkg` |
 | `./test.sh` | 运行自动化验收测试 |
-| `./scripts/make-source-archive.sh` | 将当前源码导出为 `dist/LivePDF-1.0.2-source.zip` |
+| `./scripts/make-source-archive.sh` | 将当前源码导出为 `dist/LivePDF-1.1.0-source.zip` |
 | `./scripts/make-icon.sh` | 从绘图源文件重新生成原创 PNG 和 ICNS 图标 |
 
 目标目录可由当前用户写入时，`install.sh` 无需管理员授权。可将 `export PATH="$HOME/.local/bin:$PATH"` 加入 shell 配置，或运行 `./install.sh --bin-dir "$HOME/bin"` 选择其他可写命令目录；此选项只更改命令位置。脚本会注册 Finder 文件类型，必要时可用“打开方式 → 其他…”选择已安装的 app。
@@ -332,6 +361,6 @@ swift scripts/make-sample.swift build/sample.pdf 7 shorter
 
 当前不包含编辑、批注、iCloud 或 SyncTeX。`Sources/LivePDF/SourceNavigation.swift` 中的 `SourceNavigationProvider` 为后续 SyncTeX 集成保留接口。
 
-源码、文档和原创图标采用 [MIT 许可证](LICENSE)。详见[依赖说明](THIRD_PARTY_NOTICES.md)和[图标来源](Resources/ICON.md)。开发相关信息见[贡献指南](CONTRIBUTING.md)、[更新记录](CHANGELOG.md)和 [v1.0.2 发行说明](RELEASE_NOTES.md)。
+源码、文档和原创图标采用 [MIT 许可证](LICENSE)。详见[依赖说明](THIRD_PARTY_NOTICES.md)和[图标来源](Resources/ICON.md)。开发相关信息见[贡献指南](CONTRIBUTING.md)、[更新记录](CHANGELOG.md)和 [v1.1.0 发行说明](RELEASE_NOTES.md)。
 
 [English ↑](#english) · [返回顶部 ↑](#livepdf)

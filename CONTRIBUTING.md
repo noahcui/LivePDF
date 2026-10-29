@@ -1,6 +1,6 @@
 # Contributing
 
-LivePDF is a small native macOS PDF reader focused on reliable reloads without
+LivePDF is a small native macOS PDF and Markdown reader focused on reliable reloads without
 losing reading position. Contributions should preserve that behavior and keep
 the runtime free of third-party dependencies.
 
@@ -16,10 +16,11 @@ restoration, include a regression test that exercises the behavior rather than
 duplicating the implementation. Use the manual checks in `README.md` for focus,
 scrolling, and visual behavior on a real target Mac.
 
-Keep file watching, immutable PDF loading, view state, and AppKit window logic
+Keep file watching, immutable document loading, rendering, view state, and AppKit window logic
 separate. Do not add PDF editing, annotations, cloud services, or SyncTeX to a
 small unrelated change. Source navigation has a dedicated protocol for future
-work.
+work. Markdown uses a dependency-free parser and a persistent WebKit shell. Keep
+raw document HTML escaped and local image access confined to its document directory.
 
 Only contribute code and assets you have the right to distribute under the
 project's MIT license. Preserve existing copyright notices and describe any

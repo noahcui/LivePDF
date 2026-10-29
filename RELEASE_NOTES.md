@@ -1,85 +1,101 @@
-A native macOS PDF reader that reloads changed files and preserves your reading position.
+# LivePDF 1.1.0
 
-macOS 原生 PDF 阅读器，文件更新后自动重载，并保留阅读位置。
+A native macOS PDF and Markdown reader that reloads changed files and preserves your reading position when possible.
+
+macOS 原生 PDF 与 Markdown 阅读器，文件更新后自动重载，并尽量保留阅读位置。
 
 **Apple Silicon · macOS 14+ · English / 简体中文**
 
 [English](#english) · [简体中文](#简体中文)
 
-## Downloads / 下载
+## Local release files / 本地发布文件
+
+This release is prepared locally in `dist/`; it has not been published to GitHub Releases.
+
+本版发布文件在本地 `dist/` 目录中准备，尚未发布到 GitHub Releases。
 
 | File / 文件 | Purpose / 用途 |
 | --- | --- |
-| [LivePDF-1.0.2-arm64.pkg](https://github.com/noahcui/LivePDF/releases/download/v1.0.2/LivePDF-1.0.2-arm64.pkg) | **Recommended / 推荐** — macOS installer / 安装包 |
-| [LivePDF-1.0.2-source.zip](https://github.com/noahcui/LivePDF/releases/download/v1.0.2/LivePDF-1.0.2-source.zip) | Source snapshot / 源码快照 |
-| [SHA256SUMS-v1.0.2.txt](https://github.com/noahcui/LivePDF/releases/download/v1.0.2/SHA256SUMS-v1.0.2.txt) | SHA-256 checksums / 文件校验清单 |
+| [LivePDF-1.1.0-arm64.pkg](dist/LivePDF-1.1.0-arm64.pkg) | macOS installer / 安装包 |
+| [LivePDF-1.1.0-source.zip](dist/LivePDF-1.1.0-source.zip) | Source snapshot / 源码快照 |
+| [SHA256SUMS-v1.1.0.txt](dist/SHA256SUMS-v1.1.0.txt) | SHA-256 checksums / 文件校验清单 |
 
-### Verify downloads / 校验下载
+### Verify files / 校验文件
 
-Download all three files into the same directory, then run the following command. Both the installer and source archive are listed in the checksum file.
+Place all three files in the same directory, then run the following command. Both the installer and source archive are listed in the checksum file.
 
 将上述三个文件放在同一目录后运行以下命令；清单会同时校验安装包和源码包。
 
 ```sh
-shasum -a 256 -c SHA256SUMS-v1.0.2.txt
+shasum -a 256 -c SHA256SUMS-v1.1.0.txt
 ```
 
 ## English
 
 ### What’s new
 
-- Added English and Simplified Chinese support to the app and installer, including menus, controls, status messages, and app-defined errors.
-- Added regional language matching, English fallback, and localization tests. The app respects macOS per-app language preferences after restarting.
-- Fixed direct executable launches treating macOS language-option values as PDF filenames.
+- Added Markdown live preview alongside PDF windows. Saving in TextEdit or another editor automatically updates the preview, keeping zoom and preserving the reading position when possible.
+- Added headings, emphasis, code, quotes, lists, task lists, tables, links, local images, and system light/dark appearance.
+- Added Markdown search with next/previous matches and clearing, plus relative Markdown/PDF links that open in LivePDF.
+- Support `.md`, `.markdown`, `.mdown`, and `.mkd` files through the open panel, Finder, drag and drop, and the command line, with English and Simplified Chinese UI.
 
 ### Install and open
 
-Open `LivePDF-1.0.2-arm64.pkg` and follow the installer. Administrator approval is required. It installs the app at `/Applications/LivePDF.app` and the command at `/usr/local/bin/livepdf`. Running the installed app requires no developer tools or TeX.
+Open `LivePDF-1.1.0-arm64.pkg` and follow the installer. Administrator approval is required. It installs the app at `/Applications/LivePDF.app` and the command at `/usr/local/bin/livepdf`. An Apple Silicon Mac running macOS 14 or later is required. Running the installed app requires no developer tools or TeX.
 
 Launch LivePDF from Applications, use Finder’s **Open With** menu, or run:
 
 ```sh
-livepdf paper.pdf
+livepdf paper.pdf "notes with spaces.md"
 ```
 
-If `/usr/local/bin` is absent from your PATH, use `/usr/local/bin/livepdf` directly.
+If `/usr/local/bin` is absent from your PATH, use `/usr/local/bin/livepdf` directly. PDF and Markdown documents can remain open together in separate windows.
 
-### Installation notes and validation
+### Markdown scope
 
-The installer is not Developer ID signed or Apple notarized; the app has an ad-hoc integrity signature. If macOS blocks it because the developer cannot be verified, confirm the download’s origin and checksum, try opening it, then look for **System Settings → Privacy & Security → Open Anyway**. See [Apple’s instructions](https://support.apple.com/en-us/102445).
+Markdown files must use UTF-8. The renderer supports an offline subset of Markdown rather than complete CommonMark/GFM. Raw HTML is displayed as text; scripts, remote images, math rendering, and Mermaid diagrams are not supported. Local images and relative document links must stay within the Markdown file’s folder or its subfolders. Images refresh when the Markdown reloads; changing an image alone does not trigger a reload.
 
-The recorded v1.0.2 acceptance run passed **31 automated tests**, covering file watching, incomplete writes, position restoration, and localization. Package structure, app integrity, architecture, minimum deployment target, and language resources were also checked. Installation and visual behavior still need confirmation on the target Mac; macOS 14 has not been tested on a separate machine.
+### Validation and signing
 
-See the [usage guide](https://github.com/noahcui/LivePDF/blob/main/README.md#use), [reload behavior](https://github.com/noahcui/LivePDF/blob/main/README.md#reload-behavior-and-configuration), and [manual checklist](https://github.com/noahcui/LivePDF/blob/main/README.md#tests-and-manual-checks) for details.
+GUI acceptance used the actual LivePDF and TextEdit windows: saving changes triggered preview updates; inserting text earlier in the document preserved the reading position and zoom. Search, next/previous matches, clearing the selection, Chinese filenames containing spaces, local images, tables, task lists, relative Markdown/PDF links, and PDF page navigation were checked through the interface.
+
+The app has an ad-hoc integrity signature. The installer is not Developer ID signed or Apple notarized. Installation and first launch on another target Mac remain to be confirmed; this release has not been tested on a separate macOS 14 machine.
+
+See the [usage guide](README.md#use) and [Markdown preview details](README.md#markdown-live-preview-110) for details.
 
 ## 简体中文
 
 ### 本版更新
 
-- 应用和安装器新增英语与简体中文支持，覆盖菜单、控件、状态提示及应用自有错误信息。
-- 新增语言及地区匹配、英语回退和本地化测试；应用支持 macOS 单个 app 的语言偏好，修改后重启生效。
-- 修复直接运行可执行文件时，将 macOS 语言选项的参数值误当作 PDF 文件名的问题。
+- 新增 Markdown 实时预览，可与 PDF 窗口同时使用。在文本编辑或其他编辑器中保存后自动更新，保留缩放，并尽量保持阅读位置。
+- 支持标题、强调、代码、引用、列表、任务列表、表格、链接、本地图片，以及系统深浅色外观。
+- 新增 Markdown 搜索、前后匹配和清除选中；文档内的相对 Markdown/PDF 链接可在 LivePDF 中打开。
+- 通过打开面板、Finder、拖放和命令行打开 `.md`、`.markdown`、`.mdown`、`.mkd` 文件，提供英语与简体中文界面。
 
 ### 安装与打开
 
-双击 `LivePDF-1.0.2-arm64.pkg`，按安装器提示操作，需要管理员授权。应用安装到 `/Applications/LivePDF.app`，命令安装到 `/usr/local/bin/livepdf`。运行已安装的应用无需开发工具或 TeX。
+双击 `LivePDF-1.1.0-arm64.pkg`，按安装器提示操作，需要管理员授权。应用安装到 `/Applications/LivePDF.app`，命令安装到 `/usr/local/bin/livepdf`。需要 Apple Silicon Mac 和 macOS 14 或更新版本；运行已安装的应用无需开发工具或 TeX。
 
 从“应用程序”启动 LivePDF，在 Finder 的“打开方式”中选择它，或运行：
 
 ```sh
-livepdf paper.pdf
+livepdf paper.pdf "有 空格的笔记.md"
 ```
 
-如果 PATH 不含 `/usr/local/bin`，可直接使用 `/usr/local/bin/livepdf`。
+如果 PATH 不含 `/usr/local/bin`，可直接使用 `/usr/local/bin/livepdf`。PDF 和 Markdown 可以分别在多个窗口中同时阅读。
 
-### 安装须知与验证
+### Markdown 支持范围
 
-安装包没有 Developer ID 签名或 Apple 公证；app 使用 ad-hoc 完整性签名。如果 macOS 因无法验证开发者而阻止打开，确认来源和校验值后，先尝试打开，再到“系统设置 → 隐私与安全性”中查找“仍要打开”。详见 [Apple 的说明](https://support.apple.com/zh-cn/102445)。
+Markdown 文件须使用 UTF-8 编码。渲染器提供离线 Markdown 常用语法子集，未完整实现 CommonMark/GFM。原始 HTML 按文本显示，不支持脚本、远程图片、数学公式渲染和 Mermaid 图表。本地图片和相对文档链接须位于 Markdown 所在目录或其子目录中。图片随 Markdown 重载而更新；仅修改图片不会触发重载。
 
-v1.0.2 的已有验收记录为 **31 项自动化测试全部通过**，覆盖文件监听、不完整写入、位置恢复和本地化。安装包结构、app 完整性、架构、最低部署目标及语言资源也已核查。仍需在目标 Mac 确认安装和视觉表现；尚未在另一台 macOS 14 设备上实测。
+### 验证与签名
 
-详细操作见[使用指南](https://github.com/noahcui/LivePDF/blob/main/README.md#使用)、[重载机制](https://github.com/noahcui/LivePDF/blob/main/README.md#重载机制与配置)和[手动验收清单](https://github.com/noahcui/LivePDF/blob/main/README.md#测试与手动验收)。
+已在真实 LivePDF 和文本编辑窗口中完成 GUI 验收：修改并保存后预览自动更新，在前文插入内容后阅读位置和缩放保持。通过界面核查了搜索、前后匹配、清除选中、含空格的中文文件名、本地图片、表格、任务列表、相对 Markdown/PDF 链接，以及 PDF 跳页。
+
+app 使用 ad-hoc 完整性签名，安装包没有 Developer ID 签名或 Apple 公证。仍需在另一台目标 Mac 确认安装和首次启动；尚未在另一台 macOS 14 设备上实测本版。
+
+详细操作见[使用指南](README.md#使用)和 [Markdown 预览说明](README.md#markdown-实时预览110)。
 
 ---
 
-[Changelog / 更新记录](https://github.com/noahcui/LivePDF/blob/main/CHANGELOG.md) · [MIT License / 许可证](https://github.com/noahcui/LivePDF/blob/main/LICENSE)
+[Changelog / 更新记录](CHANGELOG.md) · [MIT License / 许可证](LICENSE)
