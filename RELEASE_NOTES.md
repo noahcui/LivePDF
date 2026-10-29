@@ -8,17 +8,17 @@ macOS 原生 PDF 与 Markdown 阅读器，文件更新后自动重载，并尽�
 
 [English](#english) · [简体中文](#简体中文)
 
-## Local release files / 本地发布文件
+## Downloads / 下载
 
-This release is prepared locally in `dist/`; it has not been published to GitHub Releases.
+Download the installer, source snapshot, and checksum file from this release.
 
-本版发布文件在本地 `dist/` 目录中准备，尚未发布到 GitHub Releases。
+本版提供安装包、源码快照和校验清单。
 
 | File / 文件 | Purpose / 用途 |
 | --- | --- |
-| [LivePDF-1.1.0-arm64.pkg](dist/LivePDF-1.1.0-arm64.pkg) | macOS installer / 安装包 |
-| [LivePDF-1.1.0-source.zip](dist/LivePDF-1.1.0-source.zip) | Source snapshot / 源码快照 |
-| [SHA256SUMS-v1.1.0.txt](dist/SHA256SUMS-v1.1.0.txt) | SHA-256 checksums / 文件校验清单 |
+| [LivePDF-1.1.0-arm64.pkg](https://github.com/noahcui/LivePDF/releases/download/v1.1.0/LivePDF-1.1.0-arm64.pkg) | macOS installer / 安装包 |
+| [LivePDF-1.1.0-source.zip](https://github.com/noahcui/LivePDF/releases/download/v1.1.0/LivePDF-1.1.0-source.zip) | Source snapshot / 源码快照 |
+| [SHA256SUMS-v1.1.0.txt](https://github.com/noahcui/LivePDF/releases/download/v1.1.0/SHA256SUMS-v1.1.0.txt) | SHA-256 checksums / 文件校验清单 |
 
 ### Verify files / 校验文件
 
@@ -61,7 +61,7 @@ GUI acceptance used the actual LivePDF and TextEdit windows: saving changes trig
 
 The app has an ad-hoc integrity signature. The installer is not Developer ID signed or Apple notarized. Installation and first launch on another target Mac remain to be confirmed; this release has not been tested on a separate macOS 14 machine.
 
-See the [usage guide](README.md#use) and [Markdown preview details](README.md#markdown-live-preview-110) for details.
+See the [usage guide](https://github.com/noahcui/LivePDF/blob/v1.1.0/README.md#use) and [Markdown preview details](https://github.com/noahcui/LivePDF/blob/v1.1.0/README.md#markdown-live-preview-110) for details.
 
 ## 简体中文
 
@@ -94,8 +94,8 @@ Markdown 文件须使用 UTF-8 编码。渲染器提供离线 Markdown 常用语
 
 app 使用 ad-hoc 完整性签名，安装包没有 Developer ID 签名或 Apple 公证。仍需在另一台目标 Mac 确认安装和首次启动；尚未在另一台 macOS 14 设备上实测本版。
 
-详细操作见[使用指南](README.md#使用)和 [Markdown 预览说明](README.md#markdown-实时预览110)。
+详细操作见[使用指南](https://github.com/noahcui/LivePDF/blob/v1.1.0/README.md#使用)和 [Markdown 预览说明](https://github.com/noahcui/LivePDF/blob/v1.1.0/README.md#markdown-实时预览110)。
 
 ---
 
-[Changelog / 更新记录](CHANGELOG.md) · [MIT License / 许可证](LICENSE)
+[Changelog / 更新记录](https://github.com/noahcui/LivePDF/blob/v1.1.0/CHANGELOG.md) · [MIT License / 许可证](https://github.com/noahcui/LivePDF/blob/v1.1.0/LICENSE)
