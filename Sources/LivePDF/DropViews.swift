@@ -92,7 +92,7 @@ final class WelcomeWindowController: NSWindowController {
         window.contentView = content
         let title = NSTextField(labelWithString: "LivePDF")
         title.font = .systemFont(ofSize: 32, weight: .semibold)
-        let detail = NSTextField(wrappingLabelWithString: L10n.text("Drop a PDF or Markdown file here, or press ⌘O.\nLive reload keeps your reading position."))
+        let detail = NSTextField(wrappingLabelWithString: L10n.text("Drop a PDF, Markdown, or PowerPoint file here, or press ⌘O.\nLive reload keeps your reading position."))
         detail.alignment = .center
         detail.textColor = .secondaryLabelColor
         detail.maximumNumberOfLines = 3

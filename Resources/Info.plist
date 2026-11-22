@@ -24,9 +24,9 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.1.0</string>
+    <string>1.2.0</string>
     <key>CFBundleVersion</key>
-    <string>4</string>
+    <string>5</string>
     <key>LSMinimumSystemVersion</key>
     <string>14.0</string>
     <key>NSHighResolutionCapable</key>
@@ -67,7 +67,26 @@
             <key>CFBundleTypeExtensions</key>
             <array><string>md</string><string>markdown</string><string>mdown</string><string>mkd</string></array>
         </dict>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>PowerPoint presentation</string>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>org.openxmlformats.presentationml.presentation</string>
+                <string>org.openxmlformats.presentationml.slideshow</string>
+                <string>com.microsoft.powerpoint.ppt</string>
+                <string>com.microsoft.powerpoint.pps</string>
+            </array>
+            <key>CFBundleTypeExtensions</key>
+            <array><string>pptx</string><string>ppsx</string><string>ppt</string><string>pps</string></array>
+        </dict>
     </array>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>LivePDF asks PowerPoint or Keynote to export presentations to PDF so it can display them.</string>
     <key>UTImportedTypeDeclarations</key>
     <array>
         <dict>

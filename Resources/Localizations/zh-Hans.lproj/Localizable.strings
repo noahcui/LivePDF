@@ -63,7 +63,7 @@
 "The PDF does not contain any pages." = "PDF 文档不包含任何页面。";
 
 /* Markdown preview */
-"Drop a PDF or Markdown file here, or press ⌘O.\nLive reload keeps your reading position." = "将 PDF 或 Markdown 文件拖到这里，或按 ⌘O 打开。\n实时刷新，保持阅读位置。";
+"Drop a PDF, Markdown, or PowerPoint file here, or press ⌘O.\nLive reload keeps your reading position." = "将 PDF、Markdown 或 PowerPoint 文件拖到这里，或按 ⌘O 打开。\n实时刷新，保持阅读位置。";
 "Open Document…" = "打开文档…";
 "Search Markdown (⌘F)" = "搜索 Markdown（⌘F）";
 "Markdown · %@" = "Markdown · %@";
@@ -73,3 +73,12 @@
 "Could not create the document directory watcher." = "无法创建文档目录监控。";
 "Could not start the document directory watcher." = "无法启动文档目录监控。";
 "The file changed while it was being read." = "读取期间文件发生了变化。";
+
+/* Presentations */
+"Converting presentation…" = "正在转换演示文稿…";
+"The presentation has not finished writing." = "演示文稿尚未写入完成。";
+"Showing presentations requires Microsoft PowerPoint or Keynote." = "显示演示文稿需要安装 Microsoft PowerPoint 或 Keynote。";
+"Allow LivePDF to control %@ in System Settings → Privacy & Security → Automation." = "请在“系统设置 → 隐私与安全性 → 自动化”中允许 LivePDF 控制 %@。";
+"%@ did not respond. It may be showing a dialog." = "%@ 没有响应，可能正在显示对话框。";
+"%@ could not export the presentation: %@" = "%@ 无法导出演示文稿：%@";
+"No PDF was produced." = "未生成 PDF。";

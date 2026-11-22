@@ -1,4 +1,5 @@
 import AppKit
+import os
 import PDFKit
 import LivePDFCore
 
@@ -16,6 +17,9 @@ final class DocumentWindowController: NSWindowController, NSWindowDelegate {
     private let loadQueue = DispatchQueue(label: "LivePDF.document-loader", qos: .userInitiated)
     private var watcher: FileWatcher?
     private var loadGeneration = 0
+    /// Read on the loader queue to skip conversions that a newer save superseded.
+    private let latestGeneration = OSAllocatedUnfairLock(initialState: 0)
+    private let isPresentation: Bool
     private var closed = false
     private var watcherWarning: String?
     private var observers: [NSObjectProtocol] = []
@@ -25,8 +29,10 @@ final class DocumentWindowController: NSWindowController, NSWindowDelegate {
     private var advanceAfterSearch = 0
     private var lastReload: Date?
 
-    init(fileURL: URL) {
+    /// A presentation is exported to PDF on every reload, then shown as a PDF.
+    init(fileURL: URL, isPresentation: Bool = false) {
         self.fileURL = fileURL
+        self.isPresentation = isPresentation
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 960, height: 820), styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
         super.init(window: window)
         window.title = fileURL.lastPathComponent
@@ -140,12 +146,23 @@ final class DocumentWindowController: NSWindowController, NSWindowDelegate {
         guard !closed else { return }
         loadGeneration += 1
         let generation = loadGeneration
+        latestGeneration.withLock { $0 = generation }
         let url = fileURL
+        let isPresentation = isPresentation
+        if isPresentation {
+            statusLabel.stringValue = L10n.text("Converting presentation…")
+            statusLabel.toolTip = statusLabel.stringValue
+        }
         // Parsing never touches the displayed document or PDFView. Each result
         // owns an immutable byte snapshot, so in-place writes cannot corrupt it.
-        loadQueue.async { [weak self] in
+        loadQueue.async { [weak self, latestGeneration] in
+            guard latestGeneration.withLock({ $0 }) == generation else { return }
             let result = Result {
-                try snapshot.map { try PDFDocumentLoader.load(data: $0) } ?? PDFDocumentLoader.load(url: url)
+                if isPresentation {
+                    return try snapshot.map { try PresentationDocumentLoader.load(data: $0, fileExtension: url.pathExtension) }
+                        ?? PresentationDocumentLoader.load(url: url)
+                }
+                return try snapshot.map { try PDFDocumentLoader.load(data: $0) } ?? PDFDocumentLoader.load(url: url)
             }
             DispatchQueue.main.async { [weak self] in
                 guard let self, !self.closed, self.loadGeneration == generation else { return }

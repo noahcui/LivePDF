@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0 — 2026-11-22
+
+- Open PowerPoint files (`.pptx`, `.ppt`, `.ppsx`, `.pps`) by exporting them to PDF through an installed Microsoft PowerPoint or Keynote, with live reload and the same position, zoom, search, and navigation as PDF windows.
+
 ## 1.1.0 — 2026-10-29
 
 - Add Markdown windows alongside PDFs, with live reload, scroll and zoom preservation, search, local images, and light/dark appearance.

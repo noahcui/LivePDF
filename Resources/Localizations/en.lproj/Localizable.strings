@@ -63,7 +63,7 @@
 "The PDF does not contain any pages." = "The PDF does not contain any pages.";
 
 /* Markdown preview */
-"Drop a PDF or Markdown file here, or press ⌘O.\nLive reload keeps your reading position." = "Drop a PDF or Markdown file here, or press ⌘O.\nLive reload keeps your reading position.";
+"Drop a PDF, Markdown, or PowerPoint file here, or press ⌘O.\nLive reload keeps your reading position." = "Drop a PDF, Markdown, or PowerPoint file here, or press ⌘O.\nLive reload keeps your reading position.";
 "Open Document…" = "Open Document…";
 "Search Markdown (⌘F)" = "Search Markdown (⌘F)";
 "Markdown · %@" = "Markdown · %@";
@@ -73,3 +73,12 @@
 "Could not create the document directory watcher." = "Could not create the document directory watcher.";
 "Could not start the document directory watcher." = "Could not start the document directory watcher.";
 "The file changed while it was being read." = "The file changed while it was being read.";
+
+/* Presentations */
+"Converting presentation…" = "Converting presentation…";
+"The presentation has not finished writing." = "The presentation has not finished writing.";
+"Showing presentations requires Microsoft PowerPoint or Keynote." = "Showing presentations requires Microsoft PowerPoint or Keynote.";
+"Allow LivePDF to control %@ in System Settings → Privacy & Security → Automation." = "Allow LivePDF to control %@ in System Settings → Privacy & Security → Automation.";
+"%@ did not respond. It may be showing a dialog." = "%@ did not respond. It may be showing a dialog.";
+"%@ could not export the presentation: %@" = "%@ could not export the presentation: %@";
+"No PDF was produced." = "No PDF was produced.";

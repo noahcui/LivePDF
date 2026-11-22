@@ -48,6 +48,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             let controller: NSWindowController & LiveDocumentWindow
             switch kind {
             case .pdf: controller = DocumentWindowController(fileURL: url)
+            case .presentation: controller = DocumentWindowController(fileURL: url, isPresentation: true)
             case .markdown: controller = MarkdownWindowController(fileURL: url)
             }
             controller.onOpenURLs = { [weak self] in self?.open(urls: $0) }

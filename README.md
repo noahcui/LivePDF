@@ -2,11 +2,11 @@
 
 <img src="Resources/AppIcon.png" width="112" alt="LivePDF icon" align="right">
 
-A native macOS PDF and Markdown reader. Rebuild your PDF or save your Markdown; keep your reading position.
+A native macOS PDF, Markdown, and PowerPoint reader. Rebuild your PDF or save your Markdown or slides; keep your reading position.
 
-macOS 原生 PDF 与 Markdown 阅读器。重新生成 PDF 或保存 Markdown 后，继续从原来的位置阅读。
+macOS 原生 PDF、Markdown 与 PowerPoint 阅读器。重新生成 PDF、保存 Markdown 或幻灯片后，继续从原来的位置阅读。
 
-[English](#english) · [简体中文](#简体中文) · [Download / 下载 v1.1.0](https://github.com/noahcui/LivePDF/releases/tag/v1.1.0)
+[English](#english) · [简体中文](#简体中文) · [Download / 下载 v1.2.0](https://github.com/noahcui/LivePDF/releases/tag/v1.2.0)
 
 Apple Silicon · macOS 14+ · Swift + AppKit + PDFKit + WebKit · [MIT](LICENSE)
 
@@ -14,7 +14,7 @@ Apple Silicon · macOS 14+ · Swift + AppKit + PDFKit + WebKit · [MIT](LICENSE)
 
 ### Install
 
-Download `LivePDF-1.1.0-arm64.pkg` from the [v1.1.0 release](https://github.com/noahcui/LivePDF/releases/tag/v1.1.0), open it on your target Mac, and follow the installer.
+Download `LivePDF-1.2.0-arm64.pkg` from the [v1.2.0 release](https://github.com/noahcui/LivePDF/releases/tag/v1.2.0), open it on your target Mac, and follow the installer.
 
 **Requires Apple Silicon and macOS 14 or later.** The installed app needs no Swift, Xcode, Command Line Tools, or TeX. The installer requires administrator approval and installs:
 
@@ -25,10 +25,10 @@ Download `LivePDF-1.1.0-arm64.pkg` from the [v1.1.0 release](https://github.com/
 
 Open LivePDF from Applications, choose it in Finder’s **Open With** menu, or run `livepdf paper.pdf`. If Finder does not list it, use **Open With → Other…** and select `/Applications/LivePDF.app`. If `/usr/local/bin` is absent from your PATH, use `/usr/local/bin/livepdf` directly.
 
-For checksum verification, download the installer, `LivePDF-1.1.0-source.zip`, and `SHA256SUMS-v1.1.0.txt` into the same directory, then run:
+For checksum verification, download the installer, `LivePDF-1.2.0-source.zip`, and `SHA256SUMS-v1.2.0.txt` into the same directory, then run:
 
 ```sh
-shasum -a 256 -c SHA256SUMS-v1.1.0.txt
+shasum -a 256 -c SHA256SUMS-v1.2.0.txt
 ```
 
 The installer is not Developer ID signed or Apple notarized; the app has a local ad-hoc integrity signature. If macOS blocks software from an unidentified developer, verify its source and checksum, try opening it, then use **System Settings → Privacy & Security → Open Anyway** if available. See [Apple’s instructions](https://support.apple.com/en-us/102445).
@@ -39,7 +39,7 @@ The installer is not Developer ID signed or Apple notarized; the app has a local
 - Restores the page, page-relative visible position, numerical zoom, and display mode. If that page no longer exists, it uses the last page.
 - Keeps the last valid document visible when a replacement is missing, incomplete, invalid, or has no pages. Automatic reload does not activate the window or show dialogs.
 - Opens each PDF in its own window, with search, page navigation, zoom, and continuous scrolling.
-- Uses native Swift, AppKit, and PDFKit with no third-party dependencies.
+- Uses native Swift, AppKit, and PDFKit with no third-party dependencies. Only PowerPoint files need other software: an installed Microsoft PowerPoint or Keynote.
 
 The app and installer support **English and Simplified Chinese**. The app uses the first supported language in your preferences, falling back to English when none match. You can also set a language for LivePDF in macOS per-app language settings; restart the app after changing it. System dialogs and system error messages follow macOS settings.
 
@@ -80,6 +80,26 @@ The preview supports headings, paragraphs, emphasis, inline and fenced code, quo
 
 The renderer is an offline Markdown subset, not a complete CommonMark/GFM implementation. Raw HTML is displayed as text; remote images, scripts, math rendering, and Mermaid diagrams are not supported. Local images are resolved relative to the Markdown file and cannot escape its containing folder through paths or symlinks. Images refresh when the Markdown is reloaded; changes to image files alone do not trigger a reload. External web links open in the default browser, and relative Markdown/PDF links inside the document's folder open in LivePDF. Markdown must be UTF-8.
 
+### PowerPoint presentations (1.2.0)
+
+```sh
+livepdf slides.pptx
+```
+
+LivePDF opens `.pptx`, `.ppt`, `.ppsx`, and `.pps` files by asking an installed **Microsoft PowerPoint** or **Keynote** to export them to PDF, then shows the result in a normal PDF window. Page, zoom, display mode, search, and page navigation therefore behave exactly as they do for PDFs, and every save of the presentation reloads the window. Animations, transitions, and media are not shown.
+
+This is the one feature that needs other software. The first time, macOS asks whether LivePDF may control the presentation application; allow it, or enable it later under **System Settings → Privacy & Security → Automation**. Each reload takes a few seconds, may launch the application, and briefly opens a private copy of the file in it. If the application is showing a dialog it cannot answer scripts; LivePDF keeps the last valid slides and reports that it did not respond.
+
+PowerPoint is tried first, then Keynote. Export through PowerPoint was verified for this release; the Keynote fallback was not. To change the order or the per-application timeout (60 seconds by default), then restart LivePDF:
+
+```sh
+defaults write com.noah.LivePDF PresentationConverter keynote
+```
+
+```sh
+defaults write com.noah.LivePDF PresentationConversionTimeout -float 120
+```
+
 ### Reload behavior and configuration
 
 LivePDF watches the PDF’s parent directory with file-level FSEvents, so replacing the file does not end the watch. After about **300 ms without a relevant change**, it reads an immutable snapshot and parses it in the background. Repeated notifications for identical file contents are ignored; **⌘R** forces a fresh load. A valid document replaces the old one on the main thread; failures wait for another file change or a manual reload.
@@ -116,9 +136,9 @@ This builds the release app at `build/LivePDF.app`. No Developer ID certificate,
 | --- | --- |
 | `./build.sh` | Build `build/LivePDF.app` |
 | `./install.sh` | Build and install to `~/Applications/LivePDF.app` and `~/.local/bin/livepdf` |
-| `./package.sh` | Build and create `dist/LivePDF-1.1.0-arm64.pkg` for another Mac |
+| `./package.sh` | Build and create `dist/LivePDF-1.2.0-arm64.pkg` for another Mac |
 | `./test.sh` | Run the automated acceptance tests |
-| `./scripts/make-source-archive.sh` | Export `dist/LivePDF-1.1.0-source.zip` from the current source tree |
+| `./scripts/make-source-archive.sh` | Export `dist/LivePDF-1.2.0-source.zip` from the current source tree |
 | `./scripts/make-icon.sh` | Regenerate the original PNG and ICNS from the drawing source |
 
 `install.sh` does not require administrator approval when its destination directories are user-writable. Add `export PATH="$HOME/.local/bin:$PATH"` to your shell configuration, or select another writable command directory with `./install.sh --bin-dir "$HOME/bin"`. This changes the command location only. Finder registration is included; if needed, choose the installed app through **Open With → Other…**.
@@ -131,9 +151,11 @@ export LIVEPDF_BUILD_PATH="/Volumes/ExternalSSD/LivePDF-build-cache"
 
 The app runs independently of that cache. `./package.sh --skip-build` packages an existing app. `./build.sh --skip-compile` reuses its executable for resource-only changes; run a normal build after changing Swift code.
 
-Build output and `dist/` are excluded from Git. Release assets are versioned snapshots; the published v1.1.0 source ZIP does not track later changes on `main`.
+Build output and `dist/` are excluded from Git. Release assets are versioned snapshots; the published v1.2.0 source ZIP does not track later changes on `main`.
 
 ### Tests and manual checks
+
+The v1.2.0 presentation check ran on the development Mac with Microsoft PowerPoint 16.114: the app’s converter exported a three-slide `.pptx` containing Chinese text to a three-page PDF with matching text, and saving a changed deck started a new conversion in the running app. The presentation window was not inspected visually, and the Keynote fallback was not exercised.
 
 The v1.1.0 GUI acceptance used the actual LivePDF and TextEdit windows. Saving edits updated the Markdown preview; inserting text earlier in the document preserved reading position and zoom. Search, next/previous matches, clearing the selection, Chinese filenames with spaces, local images, tables, task lists, relative Markdown/PDF links, and PDF page navigation were checked through the interface. Installation and first launch on another Mac remain to be confirmed.
 
@@ -185,7 +207,7 @@ On your target Mac, check:
 
 Editing, annotations, iCloud, and SyncTeX are outside the current scope. `SourceNavigationProvider` in `Sources/LivePDF/SourceNavigation.swift` reserves an interface for future SyncTeX integration.
 
-Source, documentation, and the original icon use the [MIT license](LICENSE). See [dependency notices](THIRD_PARTY_NOTICES.md) and [icon provenance](Resources/ICON.md). For development, see [contributing](CONTRIBUTING.md), the [changelog](CHANGELOG.md), and [v1.1.0 release notes](RELEASE_NOTES.md).
+Source, documentation, and the original icon use the [MIT license](LICENSE). See [dependency notices](THIRD_PARTY_NOTICES.md) and [icon provenance](Resources/ICON.md). For development, see [contributing](CONTRIBUTING.md), the [changelog](CHANGELOG.md), and [v1.2.0 release notes](RELEASE_NOTES.md).
 
 [简体中文 ↓](#简体中文) · [Back to top ↑](#livepdf)
 
@@ -208,7 +230,7 @@ livepdf README.md
 
 ### 安装
 
-从 [v1.1.0 发行页面](https://github.com/noahcui/LivePDF/releases/tag/v1.1.0) 下载 `LivePDF-1.1.0-arm64.pkg`，拷到目标 Mac，双击并按安装器提示操作。
+从 [v1.2.0 发行页面](https://github.com/noahcui/LivePDF/releases/tag/v1.2.0) 下载 `LivePDF-1.2.0-arm64.pkg`，拷到目标 Mac，双击并按安装器提示操作。
 
 **需要 Apple Silicon 和 macOS 14 或更新版本。** 运行已安装的 app 无需 Swift、Xcode、Command Line Tools 或 TeX。安装器需要管理员授权，安装位置为：
 
@@ -219,10 +241,10 @@ livepdf README.md
 
 从“应用程序”打开 LivePDF、在 Finder 的“打开方式”中选择它，或运行 `livepdf paper.pdf`。如果 Finder 未列出 LivePDF，可用“打开方式 → 其他…”选择 `/Applications/LivePDF.app`。如果 PATH 不含 `/usr/local/bin`，可直接使用 `/usr/local/bin/livepdf`。
 
-如需核验下载文件，将安装包、`LivePDF-1.1.0-source.zip` 和 `SHA256SUMS-v1.1.0.txt` 放在同一目录，运行：
+如需核验下载文件，将安装包、`LivePDF-1.2.0-source.zip` 和 `SHA256SUMS-v1.2.0.txt` 放在同一目录，运行：
 
 ```sh
-shasum -a 256 -c SHA256SUMS-v1.1.0.txt
+shasum -a 256 -c SHA256SUMS-v1.2.0.txt
 ```
 
 安装包没有 Developer ID 签名或 Apple 公证；app 使用本地 ad-hoc 完整性签名。如果 macOS 因无法验证开发者而阻止打开，确认来源和校验值后，先尝试打开，再到“系统设置 → 隐私与安全性”中选择可用的“仍要打开”。详见 [Apple 的说明](https://support.apple.com/zh-cn/102445)。
@@ -233,7 +255,7 @@ shasum -a 256 -c SHA256SUMS-v1.1.0.txt
 - 恢复页码、页内可见位置、数值缩放比例和显示模式；原页不存在时使用最后一页。
 - 替换文件暂时不存在、不完整、无效或没有页面时，保留最近一次有效内容。自动重载不激活窗口、不弹对话框。
 - 每个 PDF 一个窗口，支持搜索、跳页、缩放和连续滚动。
-- Swift + AppKit + PDFKit 原生实现，无第三方依赖。
+- Swift + AppKit + PDFKit 原生实现，无第三方依赖。只有 PowerPoint 文件需要其他软件：本机安装的 Microsoft PowerPoint 或 Keynote。
 
 应用和安装器均支持**英语和简体中文**。应用按首选语言列表选择受支持的语言，均不匹配时回退为英语。也可在 macOS 的单个 app 语言设置中指定 LivePDF 的语言，修改后重启应用。系统对话框和系统错误信息的语言由 macOS 设置决定。
 
@@ -259,6 +281,26 @@ livepdf "含 空格的论文.pdf" another.pdf
 | 切换显示模式 | “显示 → 连续滚动 / 单页 / 双页连续滚动” |
 
 默认使用连续滚动。顶部栏也可输入页码和搜索词，按回车执行。标题栏显示文件名和最近一次成功加载的时间。
+
+### PowerPoint 演示文稿（1.2.0）
+
+```sh
+livepdf slides.pptx
+```
+
+LivePDF 打开 `.pptx`、`.ppt`、`.ppsx`、`.pps` 时，会让本机安装的 **Microsoft PowerPoint** 或 **Keynote** 将其导出为 PDF，再用普通 PDF 窗口显示。因此页码、缩放、显示模式、搜索和跳页与 PDF 完全一致，每次保存演示文稿后窗口都会刷新。不显示动画、切换效果和媒体。
+
+这是唯一需要其他软件的功能。首次使用时，macOS 会询问是否允许 LivePDF 控制演示应用；请允许，或稍后在“系统设置 → 隐私与安全性 → 自动化”中开启。每次刷新需要几秒，可能会启动该应用，并在其中短暂打开文件的一份私有副本。应用正在显示对话框时无法响应脚本；LivePDF 会保留上次有效的幻灯片并提示应用没有响应。
+
+默认先尝试 PowerPoint，再尝试 Keynote。本版已验证通过 PowerPoint 导出，Keynote 备用路径尚未验证。可调整顺序或每个应用的超时时间（默认 60 秒），随后重启 LivePDF：
+
+```sh
+defaults write com.noah.LivePDF PresentationConverter keynote
+```
+
+```sh
+defaults write com.noah.LivePDF PresentationConversionTimeout -float 120
+```
 
 ### 重载机制与配置
 
@@ -296,9 +338,9 @@ cd LivePDF
 | --- | --- |
 | `./build.sh` | 构建 `build/LivePDF.app` |
 | `./install.sh` | 构建并安装到 `~/Applications/LivePDF.app` 和 `~/.local/bin/livepdf` |
-| `./package.sh` | 构建并生成供其他 Mac 安装的 `dist/LivePDF-1.1.0-arm64.pkg` |
+| `./package.sh` | 构建并生成供其他 Mac 安装的 `dist/LivePDF-1.2.0-arm64.pkg` |
 | `./test.sh` | 运行自动化验收测试 |
-| `./scripts/make-source-archive.sh` | 将当前源码导出为 `dist/LivePDF-1.1.0-source.zip` |
+| `./scripts/make-source-archive.sh` | 将当前源码导出为 `dist/LivePDF-1.2.0-source.zip` |
 | `./scripts/make-icon.sh` | 从绘图源文件重新生成原创 PNG 和 ICNS 图标 |
 
 目标目录可由当前用户写入时，`install.sh` 无需管理员授权。可将 `export PATH="$HOME/.local/bin:$PATH"` 加入 shell 配置，或运行 `./install.sh --bin-dir "$HOME/bin"` 选择其他可写命令目录；此选项只更改命令位置。脚本会注册 Finder 文件类型，必要时可用“打开方式 → 其他…”选择已安装的 app。
@@ -311,9 +353,11 @@ export LIVEPDF_BUILD_PATH="/Volumes/ExternalSSD/LivePDF-build-cache"
 
 app 运行不依赖该缓存。`./package.sh --skip-build` 直接打包已有 app；`./build.sh --skip-compile` 仅适合复用已有可执行文件更新资源。Swift 源码变化后应正常构建。
 
-构建产物和 `dist/` 不进入 Git。发行文件是对应版本的快照；已发布的 v1.1.0 源码 ZIP 不会随 `main` 的后续修改而变化。
+构建产物和 `dist/` 不进入 Git。发行文件是对应版本的快照；已发布的 v1.2.0 源码 ZIP 不会随 `main` 的后续修改而变化。
 
 ### 测试与手动验收
+
+v1.2.0 的演示文稿检查在开发机上使用 Microsoft PowerPoint 16.114 完成：应用的转换器把含中文的三页 `.pptx` 导出为文字一致的三页 PDF；保存修改后的文件会让运行中的应用重新转换。尚未目视检查演示文稿窗口，也未实测 Keynote 备用路径。
 
 v1.1.0 已在真实 LivePDF 和文本编辑窗口中完成 GUI 验收：修改并保存后 Markdown 预览自动更新，在前文插入内容后阅读位置和缩放保持。通过界面核查了搜索、前后匹配、清除选中、含空格的中文文件名、本地图片、表格、任务列表、相对 Markdown/PDF 链接，以及 PDF 跳页。仍需在另一台 Mac 确认安装和首次启动。
 
@@ -365,6 +409,6 @@ swift scripts/make-sample.swift build/sample.pdf 7 shorter
 
 当前不包含编辑、批注、iCloud 或 SyncTeX。`Sources/LivePDF/SourceNavigation.swift` 中的 `SourceNavigationProvider` 为后续 SyncTeX 集成保留接口。
 
-源码、文档和原创图标采用 [MIT 许可证](LICENSE)。详见[依赖说明](THIRD_PARTY_NOTICES.md)和[图标来源](Resources/ICON.md)。开发相关信息见[贡献指南](CONTRIBUTING.md)、[更新记录](CHANGELOG.md)和 [v1.1.0 发行说明](RELEASE_NOTES.md)。
+源码、文档和原创图标采用 [MIT 许可证](LICENSE)。详见[依赖说明](THIRD_PARTY_NOTICES.md)和[图标来源](Resources/ICON.md)。开发相关信息见[贡献指南](CONTRIBUTING.md)、[更新记录](CHANGELOG.md)和 [v1.2.0 发行说明](RELEASE_NOTES.md)。
 
 [English ↑](#english) · [返回顶部 ↑](#livepdf)
