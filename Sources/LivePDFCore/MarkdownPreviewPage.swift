@@ -30,6 +30,13 @@ public enum MarkdownPreviewPage {
     input[type=checkbox] { accent-color:var(--accent); margin-right:.5em; }
     .task-list { list-style:none; } .task-list-item { margin-left:-1.3em; }
     @media(max-width:600px) { article { padding:24px 22px 70px; } }
+    @media print {
+      :root { color-scheme:light; --bg:#fff; --fg:#24292f; --muted:#656d76; --line:#d8dee4; --code:#f5f6f8; --accent:#0969da; }
+      * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      article, article.wide { max-width:none; padding:0; }
+      pre { overflow:visible; white-space:pre-wrap; } table { overflow:visible; }
+      h1,h2,h3,h4,h5,h6 { break-after:avoid; } pre,blockquote,img,tr { break-inside:avoid; }
+    }
     </style></head><body><article id="document"></article>
     <script>
     (() => {

@@ -230,6 +230,28 @@ final class DocumentWindowController: NSWindowController, NSWindowDelegate {
         }
     }
 
+    /// Exports every page of the document on screen. For a presentation this is
+    /// the PDF already converted, so nothing is converted again.
+    @objc func exportPDF(_ sender: Any?) {
+        guard let window, let document = pdfView.document else { return }
+        PDFExport.chooseDestination(for: fileURL, in: window) { [weak self] destination in
+            guard let self, !self.closed else { return }
+            do {
+                guard let data = document.dataRepresentation() else { throw CocoaError(.fileWriteUnknown) }
+                try data.write(to: destination, options: .atomic)
+                self.statusLabel.stringValue = L10n.format("Exported %ld pages · %@", document.pageCount, destination.path)
+            } catch {
+                self.statusLabel.stringValue = L10n.format("Could not export PDF: %@", error.localizedDescription)
+                NSSound.beep()
+            }
+            self.statusLabel.toolTip = self.statusLabel.stringValue
+        }
+    }
+
+    @objc func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        menuItem.action != #selector(exportPDF(_:)) || pdfView.document != nil
+    }
+
     @objc func focusPage(_ sender: Any?) {
         window?.makeFirstResponder(pageField)
         pageField.selectText(nil)

@@ -218,6 +218,27 @@ final class MarkdownWindowController: NSWindowController, NSWindowDelegate, WKNa
         }
     }
 
+    /// Exports the whole rendered document as a paginated PDF.
+    @objc func exportPDF(_ sender: Any?) {
+        guard let window, ready, lastBody != nil else { return }
+        PDFExport.chooseDestination(for: fileURL, in: window) { [weak self] destination in
+            guard let self, !self.closed else { return }
+            PDFExport.export(self.webView, to: destination) { [weak self] succeeded in
+                guard let self, !self.closed else { return }
+                if succeeded {
+                    self.setStatus(L10n.format("Exported PDF · %@", destination.path))
+                } else {
+                    self.setStatus(L10n.format("Could not export PDF: %@", destination.path))
+                    NSSound.beep()
+                }
+            }
+        }
+    }
+
+    @objc func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        menuItem.action != #selector(exportPDF(_:)) || (ready && lastBody != nil)
+    }
+
     @objc func showSearch(_ sender: Any?) {
         window?.makeFirstResponder(searchField)
         searchField.selectText(nil)

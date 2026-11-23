@@ -115,6 +115,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         open.target = self
         fileMenu.addItem(withTitle: L10n.text("Reload"), action: #selector(DocumentWindowController.reloadDocument(_:)), keyEquivalent: "r")
         fileMenu.addItem(.separator())
+        let export = fileMenu.addItem(withTitle: L10n.text("Export as PDF…"), action: #selector(DocumentWindowController.exportPDF(_:)), keyEquivalent: "e")
+        export.keyEquivalentModifierMask = [.command, .shift]
+        fileMenu.addItem(.separator())
         fileMenu.addItem(withTitle: L10n.text("Close Window"), action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
         add(fileMenu, to: main)
 

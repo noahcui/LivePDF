@@ -30,10 +30,18 @@ struct PresentationConverterTests {
         }
     }
 
-    @Test func preferredEngineIsTriedFirst() {
-        #expect(PresentationConverter.order(preferred: nil) == [.powerPoint, .keynote])
-        #expect(PresentationConverter.order(preferred: "Keynote") == [.keynote, .powerPoint])
-        #expect(PresentationConverter.order(preferred: "libreoffice") == [.powerPoint, .keynote])
+    @Test func keynoteConvertsOnlyWhenPowerPointIsMissing() {
+        typealias Engine = PresentationConverter.Engine
+        let both: (Engine) -> Bool = { _ in true }
+        let keynoteOnly: (Engine) -> Bool = { $0 == .keynote }
+        let powerPointOnly: (Engine) -> Bool = { $0 == .powerPoint }
+        #expect(PresentationConverter.selectEngine(preferred: nil, isInstalled: both) == .powerPoint)
+        #expect(PresentationConverter.selectEngine(preferred: "libreoffice", isInstalled: both) == .powerPoint)
+        #expect(PresentationConverter.selectEngine(preferred: nil, isInstalled: keynoteOnly) == .keynote)
+        #expect(PresentationConverter.selectEngine(preferred: nil, isInstalled: { _ in false }) == nil)
+        // The explicit override still picks Keynote, unless it is not installed.
+        #expect(PresentationConverter.selectEngine(preferred: "Keynote", isInstalled: both) == .keynote)
+        #expect(PresentationConverter.selectEngine(preferred: "keynote", isInstalled: powerPointOnly) == .powerPoint)
     }
 
     @Test func classifiesAppleScriptFailures() {

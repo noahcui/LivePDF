@@ -55,14 +55,20 @@ public enum PresentationConverter {
         }
     }
 
-    /// Set `defaults write com.noah.LivePDF PresentationConverter keynote` (or
-    /// `powerpoint`) to try that application first.
+    /// PowerPoint converts whenever it is installed. Set
+    /// `defaults write com.noah.LivePDF PresentationConverter keynote` to use
+    /// Keynote instead.
     public static let preferredEngineDefaultsKey = "PresentationConverter"
     public static let timeoutDefaultsKey = "PresentationConversionTimeout"
 
-    /// Installed engines in the order they are tried.
-    public static func availableEngines(preferred: String? = UserDefaults.standard.string(forKey: preferredEngineDefaultsKey)) -> [Engine] {
-        order(preferred: preferred).filter { $0.installedBundleIdentifier != nil }
+    /// The one application that converts: the first installed engine in order.
+    /// A failure in it is reported, never retried in the other application.
+    public static func selectedEngine(preferred: String? = UserDefaults.standard.string(forKey: preferredEngineDefaultsKey)) -> Engine? {
+        selectEngine(preferred: preferred) { $0.installedBundleIdentifier != nil }
+    }
+
+    static func selectEngine(preferred: String?, isInstalled: (Engine) -> Bool) -> Engine? {
+        order(preferred: preferred).first(where: isInstalled)
     }
 
     static func order(preferred: String?) -> [Engine] {
@@ -75,20 +81,10 @@ public enum PresentationConverter {
         guard hasCompleteEnvelope(data, fileExtension: fileExtension) else {
             throw ConvertError.incompletePresentation
         }
-        let engines = availableEngines()
-        guard !engines.isEmpty else { throw ConvertError.noConverterInstalled }
+        guard let engine = selectedEngine() else { throw ConvertError.noConverterInstalled }
         let configured = UserDefaults.standard.double(forKey: timeoutDefaultsKey)
         let timeout = configured.isFinite && configured >= 5 ? configured : 60
-        var firstError: Error?
-        for engine in engines {
-            do {
-                return try convert(data: data, fileExtension: fileExtension, engine: engine, timeout: timeout)
-            } catch {
-                // Report the preferred application's failure if every engine fails.
-                firstError = firstError ?? error
-            }
-        }
-        throw firstError ?? ConvertError.noConverterInstalled
+        return try convert(data: data, fileExtension: fileExtension, engine: engine, timeout: timeout)
     }
 
     static func convert(data: Data, fileExtension: String, engine: Engine, timeout: TimeInterval) throws -> Data {

@@ -1,4 +1,5 @@
 import AppKit
+import PDFKit
 import WebKit
 import Testing
 @testable import LivePDFCore
@@ -51,6 +52,31 @@ struct MarkdownPreviewTests {
             #expect(try await !find("Not present in this document"))
             #expect(try await web.evaluateJavaScript("getSelection().toString()") as? String == "")
         }
+    }
+
+    @Test func exportsWholeDocumentAsPaginatedPDF() async throws {
+        try await withPreview { web in
+            let body = "<h1>导出 Export heading</h1>" + (0..<200).map { "<p>Paragraph \($0) of the exported document.</p>" }.joined()
+            _ = try await web.callAsyncJavaScript("return window.livePDF.render(body)", arguments: ["body": body], in: nil, contentWorld: .page)
+            let destination = FileManager.default.temporaryDirectory.appendingPathComponent("LivePDF-export-\(UUID().uuidString).pdf")
+            defer { try? FileManager.default.removeItem(at: destination) }
+            let succeeded = await withCheckedContinuation { continuation in
+                PDFExport.export(web, to: destination) { continuation.resume(returning: $0) }
+            }
+            #expect(succeeded)
+            let document = try #require(PDFDocument(url: destination))
+            #expect(document.pageCount > 1)
+            let text = document.string ?? ""
+            #expect(text.contains("导出 Export heading"))
+            #expect(text.contains("Paragraph 0 of"))
+            #expect(text.contains("Paragraph 199 of"))
+        }
+    }
+
+    @Test func suggestsExportNamesThatDoNotOverwriteTheSource() {
+        #expect(PDFExport.suggestedFileName(for: URL(fileURLWithPath: "/tmp/讲义 v2.pptx")) == "讲义 v2.pdf")
+        #expect(PDFExport.suggestedFileName(for: URL(fileURLWithPath: "/tmp/notes.final.md")) == "notes.final.pdf")
+        #expect(PDFExport.suggestedFileName(for: URL(fileURLWithPath: "/tmp/paper.PDF")) == "paper-export.pdf")
     }
 
     private func withPreview(_ test: (WKWebView) async throws -> Void) async throws {

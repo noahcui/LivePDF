@@ -82,3 +82,10 @@
 "%@ did not respond. It may be showing a dialog." = "%@ 没有响应，可能正在显示对话框。";
 "%@ could not export the presentation: %@" = "%@ 无法导出演示文稿：%@";
 "No PDF was produced." = "未生成 PDF。";
+
+/* Export */
+"Export as PDF…" = "导出为 PDF…";
+"Export" = "导出";
+"Exported %ld pages · %@" = "已导出 %ld 页 · %@";
+"Exported PDF · %@" = "已导出 PDF · %@";
+"Could not export PDF: %@" = "无法导出 PDF：%@";

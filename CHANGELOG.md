@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0 — 2026-11-23
+
+- Add **File → Export as PDF…** (⇧⌘E) to every document window. It exports the whole document: PDF and presentation windows save all pages of the PDF on screen, and Markdown windows save a paginated PDF.
+- Convert presentations with Microsoft PowerPoint whenever it is installed. Keynote is used only when PowerPoint is not installed, and a PowerPoint failure is no longer retried in Keynote.
+
 ## 1.2.0 — 2026-11-22
 
 - Open PowerPoint files (`.pptx`, `.ppt`, `.ppsx`, `.pps`) by exporting them to PDF through an installed Microsoft PowerPoint or Keynote, with live reload and the same position, zoom, search, and navigation as PDF windows.

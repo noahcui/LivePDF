@@ -82,3 +82,10 @@
 "%@ did not respond. It may be showing a dialog." = "%@ did not respond. It may be showing a dialog.";
 "%@ could not export the presentation: %@" = "%@ could not export the presentation: %@";
 "No PDF was produced." = "No PDF was produced.";
+
+/* Export */
+"Export as PDF…" = "Export as PDF…";
+"Export" = "Export";
+"Exported %ld pages · %@" = "Exported %ld pages · %@";
+"Exported PDF · %@" = "Exported PDF · %@";
+"Could not export PDF: %@" = "Could not export PDF: %@";
